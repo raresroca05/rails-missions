@@ -2,8 +2,33 @@ require "rails_helper"
 
 RSpec.describe "Fibonacci Sequence", type: :request do
 
-  describe 'POST /fibonacci.json' do
+  let!(:fibonaccis) { create_list(:fibonacci, 15) }
+  let!(:fibonacci) { create(:fibonacci, created_at: 1.days.from_now) }
 
+  describe 'GET /fibonacci.json' do
+    context 'when retrieving the right set of data' do
+      before { get '/fibonacci.json' }
+
+      it 'should have the right respose code' do
+        expect(response.content_type).to eq('application/json')
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'should have data' do
+        expect(json).not_to be_empty
+      end
+
+      it 'should return only ten records' do
+        expect(json.size).to eq(10)
+      end
+
+      it 'should order the data correctly' do
+        expect(json.first['value']).to eql(fibonacci.value)
+      end
+    end
+  end
+
+  describe 'POST /fibonacci.json' do
     context 'when position is given' do
       let(:position) { 10 }
       let(:expected_result) { 55 }
@@ -28,7 +53,7 @@ RSpec.describe "Fibonacci Sequence", type: :request do
       end
 
       it 'should create one record with the values' do
-        expect(Fibonacci.count).to eq(1)
+        expect(Fibonacci.count).to eq(17)
       end
     end
 
