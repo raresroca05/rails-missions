@@ -1,6 +1,12 @@
 class FibonacciController < ApplicationController
   protect_from_forgery
 
+  def index
+    fibos = Fibonacci.last_ten
+
+    render json: fibos, each_serializer: FibonacciSerializer, status: :ok
+  end
+
   def create
     position = params[:n]
 
