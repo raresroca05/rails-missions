@@ -28,6 +28,6 @@ class FibonacciPositionService
     end
 
     def request_time
-      1000 * (Time.now.to_f - start_time.to_f)
+      (Time.now - start_time).in_milliseconds
     end
 end

@@ -12,7 +12,7 @@ RSpec.describe "Fibonacci Sequence", type: :request do
 
       it 'should have the right response code and type' do
         expect(response.content_type).to eq('application/json')
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:created)
       end
 
       it 'should have the right keys' do
@@ -25,6 +25,10 @@ RSpec.describe "Fibonacci Sequence", type: :request do
         expect(json['value']).to eql(position.to_s)
         expect(json['result']).to eql(expected_result)
         expect(json['runtime']).to be_present
+      end
+
+      it 'should create one record with the values' do
+        expect(Fibonacci.count).to eq(1)
       end
     end
 
